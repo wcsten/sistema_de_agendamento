@@ -1,21 +1,65 @@
-sistema_de_agendamento 0.0.1
+### Requirements
 
-App para agendamento de pacientes.
+* An activated python virtualenv.
+* django and restframework installed and running.
 
+Virtualenv installation/activation example:
+```bash
+pip install virtualenv
+virtualenv env
+source env/bin/activate
+```
 
--python >= 3.6
+#### After installation all of the above requirements:
 
--python-pip
+### Installing the project
 
--virtualenv
+Clone the repository and install it:
 
-Como instalar?
-Crie um virtualenv (de preferência com virtualenvwrapper)
+```bash 
+git clone https://github.com/wcsten/sistema_de_agendamento.git
+```
 
-mkvirtualenv agensys
-Com a virtualenv ativada acesse a raiz do projeto
+Go to `/sistema_de_agendamento` directory:
 
-cd ~/<project_path>/agensys/
-Instale as dependencias do projeto requirements.txt
+```bash
+cd sistema_de_agendamento
+```
 
+Run the following command:
+
+```bash
 pip install -r requirements.txt
+```
+
+Run the Migrate command to synchronize the database with the final version.
+
+```bash
+./manage.py migrate
+```
+Run the command to create a superuser:
+```bash
+./manage.py createsuperuser
+```
+
+### Running
+
+Running the application:
+```bash
+./manage.py runserver
+```
+
+Let's use the pytest to do the tests, with it properly installed we will execute the following code in the terminal inside the directory
+/sistema_de_agendamento:
+
+```bash
+pytest
+```
+
+### Testing
+
+Running tests:
+
+```bash
+make test
+```

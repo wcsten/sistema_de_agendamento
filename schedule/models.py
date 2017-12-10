@@ -19,10 +19,10 @@ class Patient(models.Model):
         verbose_name_plural = 'Pacientes'
 
     def __str__(self):
-        self.name
+        return "{}".format(self.email)
 
     def __repr__(self):
-        return f'<{self.pk} - {self.email}>'
+        return "{}".format(self.email)
 
 
 class Procedure(models.Model):
@@ -34,23 +34,27 @@ class Procedure(models.Model):
         verbose_name_plural = 'Procedimentos'
 
     def __str__(self):
-        self.name
+        return "{}".format(self.name)
 
     def __repr__(self):
-        return f'<{self.pk}>'
+        return "{}".format(self.name)
 
 
+#TODO modify procedure field to procedures
 class Schedule(models.Model):
-    detail = models.CharField('Detalhes', max_length=200, default='')
+    detail = models.CharField('Detalhes', max_length=200, default=None)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     procedure = models.ManyToManyField(Procedure)
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
 
     class Meta:
         verbose_name = 'Agendamento'
         verbose_name_plural = 'Agendamentos'
 
     def __str__(self):
-        self.detail
+        return "{}".format(self.pk)
 
     def __repr__(self):
-        return f'<{self.pk} - {self.detail}>'
+        return "{}".format(self.pk)

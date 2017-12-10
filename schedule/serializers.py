@@ -30,4 +30,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
             'detail',
             'patient',
             'procedure',
+            'date',
+            'start_time',
+            'end_time',
         ]
