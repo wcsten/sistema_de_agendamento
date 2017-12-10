@@ -49,17 +49,13 @@ Running the application:
 ./manage.py runserver
 ```
 
+### Testing
+
+Running tests:
+
 Let's use the pytest to do the tests, with it properly installed we will execute the following code in the terminal inside the directory
 /sistema_de_agendamento:
 
 ```bash
 pytest
-```
-
-### Testing
-
-Running tests:
-
-```bash
-make test
 ```
