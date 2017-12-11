@@ -34,3 +34,10 @@ class ScheduleSerializer(serializers.ModelSerializer):
             'start_time',
             'end_time',
         ]
+
+        #TODO test the validate start_time and end_time
+        def validate(self, data):
+            print(data)
+            if data['start_time'] > data['end_time']:
+                raise serializers.ValidationError(
+                    "A hora de Termino não pode ser maior que a hora de inicio")

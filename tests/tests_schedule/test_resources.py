@@ -239,10 +239,47 @@ def test_create_schedule_success():
     assert Schedule.objects.all().count() == 0
 
     response = client.post(url, data=payload, format='json')
-    print(response.data)
+
     assert response.status_code == 201
 
     assert Schedule.objects.all().count() == 1
+
+
+def test_create_schedule_error():
+    user = User(username='gabriel')
+    user.set_password('teste')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+
+    patient = Patient(name='Gabriel', email='gabriel_sten@hotmail.com')
+    patient.save()
+
+    procedure = Procedure(name='Exame de sangue',
+                          description='12 horas de jejum')
+    procedure.save()
+
+    client = APIClient()
+    client.login(username='gabriel', password='teste')
+
+    url = reverse('schedule-list')
+
+    payload = {
+        "detail": "exame do gabriel",
+        "patient": patient.id,
+        "procedure": [procedure.id],
+        "date": "2017-12-14",
+        "start_time": "15:00:00",
+        "end_time": "14:00:00"
+    }
+
+    assert Schedule.objects.all().count() == 0
+
+    response = client.post(url, data=payload, format='json')
+
+    assert response.status_code == 400
+
+    assert Schedule.objects.all().count() == 0
 
 
 def test_list_schedule_success():
@@ -271,11 +308,8 @@ def test_put_schedule_success():
     patient = Patient(name='Gabriel', email='gabriel_sten@hotmail.com')
     patient.save()
 
-    print(patient)
-
     procedure = Procedure(name='Raio-x', description='Raio-x da Perna')
     procedure.save()
-    print(procedure)
 
     schedule = Schedule(
         patient=patient,
@@ -316,11 +350,8 @@ def test_delete_schedule_success():
     patient = Patient(name='Gabriel', email='gabriel_sten@hotmail.com')
     patient.save()
 
-    print(patient)
-
     procedure = Procedure(name='Raio-x', description='Raio-x da Perna')
     procedure.save()
-    print(procedure)
 
     schedule = Schedule(
         patient=patient,
