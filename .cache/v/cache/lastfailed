@@ -1,4 +1,0 @@
-{
-  "tests/tests_schedule/test_resources.py::test_create_procedure_sucess": true,
-  "tests/tests_schedule/test_resources.py::test_create_schedule_error": true
-}
