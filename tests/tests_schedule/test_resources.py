@@ -7,6 +7,11 @@ from schedule.models import Patient, Procedure, Schedule
 
 pytestmark = pytest.mark.django_db
 
+"""
+Patient-related tests success and error and
+Validators tests.
+"""
+
 
 def test_create_patient_success():
     user = User(username='gabriel')
@@ -18,11 +23,10 @@ def test_create_patient_success():
     client = APIClient()
     client.login(username='gabriel', password='teste')
 
-    url = reverse('patient-list')  # GET list POST create
-    # url = reverse('patient-detail') # PUT alterar, GET detail, DELETE (passar ID)
+    url = reverse('patient-list')
 
     payload = {
-        'name': 'Vladimir',
+        'name': 'Vladimir Lênin',
         'email': 'vladimir@hotmail.com'
     }
     assert Patient.objects.all().count() == 0
@@ -46,11 +50,11 @@ def test_create_patient_error():
     url = reverse('patient-list')
 
     payload = [{
-        'name': 'Vladimir',
+        'name': 'Vladimir Lênin',
         'email': 'gabriel@hotmail.com'
     },
         {
-        'name': 'Gabriel',
+        'name': 'Gabriel Stain de Souza',
         'email': 'gabriel_sten@hotmail.com'
 
     }
@@ -86,7 +90,8 @@ def test_put_patient_success():
     user.is_staff = True
     user.save()
 
-    patient = Patient(name='Gabriel', email='gabriel_sten@hotmail.com')
+    patient = Patient(name='Gabriel Stain de Souza',
+                      email='gabriel_sten@hotmail.com')
     patient.save()
 
     client = APIClient()
@@ -95,7 +100,7 @@ def test_put_patient_success():
     url = reverse('patient-detail', [patient.id])
 
     payload = {
-        'name': 'Joao',
+        'name': 'Joao Djones',
         'email': 'joao@joao.com'
     }
 
@@ -121,6 +126,12 @@ def test_delete_patient_success():
     response = client.delete(url)
 
     assert response.status_code == 204
+
+
+"""
+Procedure-related tests success and error and
+Validators tests.
+"""
 
 
 def test_create_procedure_success():
@@ -208,6 +219,12 @@ def test_delete_procedure_success():
     assert response.status_code == 204
 
 
+"""
+Schedule-related tests success and error and
+Validators tests.
+"""
+
+
 def test_create_schedule_success():
     user = User(username='gabriel')
     user.set_password('teste')
@@ -215,7 +232,8 @@ def test_create_schedule_success():
     user.is_staff = True
     user.save()
 
-    patient = Patient(name='Gabriel', email='gabriel_sten@hotmail.com')
+    patient = Patient(name='Gabriel Stain de Souza',
+                      email='gabriel_sten@hotmail.com')
     patient.save()
 
     procedure = Procedure(name='Exame de sangue',
@@ -252,7 +270,8 @@ def test_create_schedule_error():
     user.is_staff = True
     user.save()
 
-    patient = Patient(name='Gabriel', email='gabriel_sten@hotmail.com')
+    patient = Patient(name='Gabriel Stain de Souza',
+                      email='gabriel_sten@hotmail.com')
     patient.save()
 
     procedure = Procedure(name='Exame de sangue',
