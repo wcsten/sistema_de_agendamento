@@ -49,6 +49,18 @@ Running the application:
 ./manage.py runserver
 ```
 
+
+In your browser access:
+
+```
+http://localhost:8000/
+```
+To use the api it is necessary to log in with the super user credentials inside the api, by clicking the login button our access:
+
+```
+http://localhost:8000/auth/login/?next=/
+```
+
 ### Testing
 
 Running tests:
@@ -70,6 +82,6 @@ pytest
 our a specific test
 
 ```bash
-pytest tests/tests_schedule/test_resources.py::your_test_name
+pytest tests/tests_schedule/test_resources.py::test_name_here
 ```
 
