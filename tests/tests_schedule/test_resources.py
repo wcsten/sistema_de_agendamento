@@ -49,16 +49,10 @@ def test_create_patient_error():
 
     url = reverse('patient-list')
 
-    payload = [{
-        'name': 'Vladimir Lênin',
-        'email': 'gabriel@hotmail.com'
-    },
-        {
-        'name': 'Gabriel Stain de Souza',
-        'email': 'gabriel_sten@hotmail.com'
-
+    payload = {
+        'name': 'Vladimir',
+        'email': 'gabriel.com'
     }
-    ]
     assert Patient.objects.all().count() == 0
 
     response = client.post(url, data=payload, format='json')
@@ -106,6 +100,31 @@ def test_put_patient_success():
 
     response = client.put(url, data=payload, format='json')
     assert response.status_code == 200
+
+
+def test_put_patient_error():
+    user = User(username='gabriel')
+    user.set_password('teste')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+
+    patient = Patient(name='Gabriel Stain de Souza',
+                      email='gabriel_sten@hotmail.com')
+    patient.save()
+
+    client = APIClient()
+    client.login(username='gabriel', password='teste')
+
+    url = reverse('patient-detail', [patient.id])
+
+    payload = {
+        'name': 'Joao Djones',
+        'email': 'joao.com'
+    }
+
+    response = client.put(url, data=payload, format='json')
+    assert response.status_code == 400
 
 
 def test_delete_patient_success():
@@ -262,8 +281,8 @@ def test_create_schedule_success():
 
     assert Schedule.objects.all().count() == 1
 
-
-def test_create_schedule_error():
+#TODO not working
+def test_create_schedule_error_date():
     user = User(username='gabriel')
     user.set_password('teste')
     user.is_superuser = True
@@ -287,9 +306,9 @@ def test_create_schedule_error():
         "detail": "exame do gabriel",
         "patient": patient.id,
         "procedure": [procedure.id],
-        "date": "2017-12-14",
-        "start_time": "15:00:00",
-        "end_time": "14:00:00"
+        "date": "2016-02-02",
+        "start_time": "14:00:00",
+        "end_time": "15:00:00"
     }
 
     assert Schedule.objects.all().count() == 0

@@ -53,6 +53,12 @@ class Schedule(models.Model):
         verbose_name = 'Agendamento'
         verbose_name_plural = 'Agendamentos'
 
+    @property
+    def date_formatted(self):
+        if self.date:
+            return self.date.strftime('%d/%m/%Y')
+        return ''
+
     def __str__(self):
         return "{}".format(self.pk)
 

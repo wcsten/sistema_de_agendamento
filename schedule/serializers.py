@@ -57,19 +57,18 @@ class ScheduleSerializer(serializers.ModelSerializer):
             'end_time',
         ]
 
-        # TODO test the validate_date
         def validate_date(self, value):
             today = date.today()
-            if value.day < today.day:
+            if value < today:
                 raise serializers.ValidationError(
                     'A data não pode ser menor que a data atual'
                 )
             return value
 
-        #TODO test the validate start_time and end_time
-        def validate(self, attrs):
-            if attrs['start_time'] > attrs['end_time']:
+        def validate(self, data):
+            validated_data = super().validate(data)
+            if validated_data['start_time'] > validated_data['end_time']:
                 raise serializers.ValidationError(
                  "A hora de Termino não pode ser maior que a hora de inicio"
                 )
-            return attrs
+            return validated_data
