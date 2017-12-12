@@ -453,6 +453,8 @@ def test_create_schedule_error_start_time():
     user.is_staff = True
     user.save()
 
+    today = date.today()
+
     client = APIClient()
     client.login(username='gabriel', password='teste')
 
@@ -470,7 +472,7 @@ def test_create_schedule_error_start_time():
         "detail": "exame do gabriel",
         "patient": patient.id,
         "procedure": [procedure.id],
-        "date": "2017-02-02",
+        "date": today,
         "start_time": "15:00:00",
         "end_time": "14:00:00"
     }
@@ -518,7 +520,7 @@ def test_put_schedule_success():
     schedule = Schedule(
         patient=patient,
         detail='Exame do Gabriel',
-        date='2017-12-16',
+        date=today,
         start_time='15:00:00',
         end_time='16:00:00'
     )
@@ -542,6 +544,94 @@ def test_put_schedule_success():
 
     response = client.put(url, data=payload, format='json')
     assert response.status_code == 200
+
+
+def test_put_schedule_error_date():
+    user = User(username='gabriel')
+    user.set_password('teste')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+
+    today = date.today()
+
+    patient = Patient(name='Gabriel', email='gabriel_sten@hotmail.com')
+    patient.save()
+
+    procedure = Procedure(name='Raio-x', description='Raio-x da Perna')
+    procedure.save()
+
+    schedule = Schedule(
+        patient=patient,
+        detail='Exame do Gabriel',
+        date=today,
+        start_time='15:00:00',
+        end_time='16:00:00'
+    )
+    schedule.save()
+    schedule.procedure.add(procedure)
+    schedule.save()
+
+    client = APIClient()
+    client.login(username='gabriel', password='teste')
+
+    url = reverse('schedule-detail', [schedule.id])
+
+    payload = {
+        "detail": "Exame do Jorge",
+        "patient": patient.id,
+        "procedure": [procedure.id],
+        "date": '2016-02-02',
+        "start_time": "20:00:00",
+        "end_time": "22:00:00"
+    }
+
+    response = client.put(url, data=payload, format='json')
+    assert response.status_code == 400
+
+
+def test_put_schedule_error_start_time():
+    user = User(username='gabriel')
+    user.set_password('teste')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+
+    today = date.today()
+
+    patient = Patient(name='Gabriel', email='gabriel_sten@hotmail.com')
+    patient.save()
+
+    procedure = Procedure(name='Raio-x', description='Raio-x da Perna')
+    procedure.save()
+
+    schedule = Schedule(
+        patient=patient,
+        detail='Exame do Gabriel',
+        date=today,
+        start_time='15:00:00',
+        end_time='16:00:00'
+    )
+    schedule.save()
+    schedule.procedure.add(procedure)
+    schedule.save()
+
+    client = APIClient()
+    client.login(username='gabriel', password='teste')
+
+    url = reverse('schedule-detail', [schedule.id])
+
+    payload = {
+        "detail": "Exame do Jorge",
+        "patient": patient.id,
+        "procedure": [procedure.id],
+        "date": today,
+        "start_time": "16:00:00",
+        "end_time": "15:00:00"
+    }
+
+    response = client.put(url, data=payload, format='json')
+    assert response.status_code == 400
 
 
 def test_delete_schedule_success():

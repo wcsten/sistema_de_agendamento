@@ -57,25 +57,25 @@ class ScheduleSerializer(serializers.ModelSerializer):
             'end_time',
         ]
 
-        def validate_detail(self, value):
-            if not len(value) > 3:
-                raise serializers.ValidationError(
-                    'A descrição não pode ter menos que 3 caracteres'
-                )
-            return value
+    def validate_detail(self, value):
+        if not len(value) > 3:
+            raise serializers.ValidationError(
+                'A descrição não pode ter menos que 3 caracteres'
+            )
+        return value
 
-        def validate_date(self, value):
-            today = date.today()
-            if value < today:
-                raise serializers.ValidationError(
-                    'A data marcada não pode ser menor que a data atual'
-                )
-            return value
+    def validate_date(self, value):
+        today = date.today()
+        if value < today:
+            raise serializers.ValidationError(
+                'A data marcada não pode ser menor que a data atual'
+            )
+        return value
 
-        def validate(self, data):
-            validated_data = super().validate(data)
-            if validated_data['start_time'] > validated_data['end_time']:
-                raise serializers.ValidationError(
-                   "A hora de Termino não pode ser maior que a hora de inicio da consulta"
-                )
-            return validated_data
+    def validate(self, data):
+        validated_data = super().validate(data)
+        if validated_data['start_time'] >= validated_data['end_time']:
+            raise serializers.ValidationError(
+             "A hora de Termino não pode ser maior nem igual que a hora de inicio"
+            )
+        return validated_data
