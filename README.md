@@ -1,7 +1,7 @@
 ### Requirements
 
 * An activated python virtualenv.
-* django and restframework installed and running.
+* django and djangorestframework installed and running.
 
 Virtualenv installation/activation example:
 ```bash
