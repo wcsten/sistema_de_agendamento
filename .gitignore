@@ -16,3 +16,4 @@ build/
 tests/report/
 dev.py
 media/
+.cache

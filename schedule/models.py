@@ -43,11 +43,11 @@ class Procedure(models.Model):
 #TODO modify procedure field to procedures
 class Schedule(models.Model):
     detail = models.CharField('Detalhes', max_length=200, default=None)
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    procedure = models.ManyToManyField(Procedure)
-    date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name='Paciente')
+    procedure = models.ManyToManyField(Procedure, verbose_name='Procedimentos')
+    date = models.DateField('Data da Consulta')
+    start_time = models.TimeField('Hora do inicio')
+    end_time = models.TimeField('Hora do fim')
 
     class Meta:
         verbose_name = 'Agendamento'

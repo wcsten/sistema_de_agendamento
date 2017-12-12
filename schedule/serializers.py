@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from schedule.models import Patient, Procedure, Schedule
-import datetime
+from datetime import date
 
 
 class PatientSerializer(serializers.ModelSerializer):
@@ -59,17 +59,17 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
         # TODO test the validate_date
         def validate_date(self, value):
-            today = datetime.date.today()
-
+            today = date.today()
             if value.day < today.day:
-                raise serializers.ValidationError('A ')
+                raise serializers.ValidationError(
+                    'A data não pode ser menor que a data atual'
+                )
             return value
 
-        # TODO test the validate start_time and end_time
-        # def validate(self, data):
-        #    if data['start_time'] > data['end_time']:
-        #        raise serializers.ValidationError(
-        #            "A hora de Termino não pode ser
-        #             maior que a hora de inicio"
-        #        )
-        #    return data
+        #TODO test the validate start_time and end_time
+        def validate(self, attrs):
+            if attrs['start_time'] > attrs['end_time']:
+                raise serializers.ValidationError(
+                 "A hora de Termino não pode ser maior que a hora de inicio"
+                )
+            return attrs
