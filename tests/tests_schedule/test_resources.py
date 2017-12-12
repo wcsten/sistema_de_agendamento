@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
 from schedule.models import Patient, Procedure, Schedule
+from datetime import date
 
 
 pytestmark = pytest.mark.django_db
@@ -37,7 +38,7 @@ def test_create_patient_success():
     assert Patient.objects.all().count() == 1
 
 
-def test_create_patient_error():
+def test_create_patient_error_name():
     user = User(username='gabriel')
     user.set_password('teste')
     user.is_superuser = True
@@ -51,6 +52,30 @@ def test_create_patient_error():
 
     payload = {
         'name': 'Vladimir',
+        'email': 'gabriel@gabriel.com'
+    }
+    assert Patient.objects.all().count() == 0
+
+    response = client.post(url, data=payload, format='json')
+    assert response.status_code == 400
+
+    assert Patient.objects.all().count() == 0
+
+
+def test_create_patient_error_email():
+    user = User(username='gabriel')
+    user.set_password('teste')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+
+    client = APIClient()
+    client.login(username='gabriel', password='teste')
+
+    url = reverse('patient-list')
+
+    payload = {
+        'name': 'Vladimir Lenin',
         'email': 'gabriel.com'
     }
     assert Patient.objects.all().count() == 0
@@ -102,7 +127,32 @@ def test_put_patient_success():
     assert response.status_code == 200
 
 
-def test_put_patient_error():
+def test_put_patient_error_name():
+    user = User(username='gabriel')
+    user.set_password('teste')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+
+    patient = Patient(name='Gabriel Stain de Souza',
+                      email='gabriel_sten@hotmail.com')
+    patient.save()
+
+    client = APIClient()
+    client.login(username='gabriel', password='teste')
+
+    url = reverse('patient-detail', [patient.id])
+
+    payload = {
+        'name': 'Joao',
+        'email': 'joao@joao.com'
+    }
+
+    response = client.put(url, data=payload, format='json')
+    assert response.status_code == 400
+
+
+def test_put_patient_error_email():
     user = User(username='gabriel')
     user.set_password('teste')
     user.is_superuser = True
@@ -177,6 +227,30 @@ def test_create_procedure_success():
     assert Procedure.objects.all().count() == 1
 
 
+def test_create_procedure_error_name():
+    user = User(username='gabriel')
+    user.set_password('teste')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+
+    client = APIClient()
+    client.login(username='gabriel', password='teste')
+
+    url = reverse('procedure-list')
+
+    payload = {
+        "name": "Exa",
+        "description": " "
+    }
+    assert Procedure.objects.all().count() == 0
+
+    response = client.post(url, data=payload, format='json')
+    assert response.status_code == 400
+
+    assert Procedure.objects.all().count() == 0
+
+
 def test_list_procedure_success():
     user = User(username='gabriel')
     user.set_password('teste')
@@ -218,6 +292,56 @@ def test_put_procedure_success():
     assert response.status_code == 200
 
 
+def test_put_procedure_error_name():
+    user = User(username='gabriel')
+    user.set_password('teste')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+
+    procedure = Procedure(name='Exame de Sangue',
+                          description='12 horas de jejum')
+    procedure.save()
+
+    client = APIClient()
+    client.login(username='gabriel', password='teste')
+
+    url = reverse('procedure-detail', [procedure.id])
+
+    payload = {
+        'name': 'Exa',
+        'description': 'Primeira urina do dia'
+    }
+
+    response = client.put(url, data=payload, format='json')
+    assert response.status_code == 400
+
+
+def test_put_procedure_error_description():
+    user = User(username='gabriel')
+    user.set_password('teste')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+
+    procedure = Procedure(name='Exame de Sangue',
+                          description='12 horas de jejum')
+    procedure.save()
+
+    client = APIClient()
+    client.login(username='gabriel', password='teste')
+
+    url = reverse('procedure-detail', [procedure.id])
+
+    payload = {
+        'name': 'Exame de Urina',
+        'description': 'Pri'
+    }
+
+    response = client.put(url, data=payload, format='json')
+    assert response.status_code == 400
+
+
 def test_delete_procedure_success():
     user = User(username='gabriel')
     user.set_password('teste')
@@ -251,6 +375,8 @@ def test_create_schedule_success():
     user.is_staff = True
     user.save()
 
+    today = date.today()
+
     patient = Patient(name='Gabriel Stain de Souza',
                       email='gabriel_sten@hotmail.com')
     patient.save()
@@ -268,7 +394,7 @@ def test_create_schedule_success():
         "detail": "exame do gabriel",
         "patient": patient.id,
         "procedure": [procedure.id],
-        "date": "2017-12-14",
+        "date": today,
         "start_time": "14:00:00",
         "end_time": "15:00:00"
     }
@@ -281,13 +407,16 @@ def test_create_schedule_success():
 
     assert Schedule.objects.all().count() == 1
 
-#TODO not working
+
 def test_create_schedule_error_date():
     user = User(username='gabriel')
     user.set_password('teste')
     user.is_superuser = True
     user.is_staff = True
     user.save()
+
+    client = APIClient()
+    client.login(username='gabriel', password='teste')
 
     patient = Patient(name='Gabriel Stain de Souza',
                       email='gabriel_sten@hotmail.com')
@@ -297,8 +426,43 @@ def test_create_schedule_error_date():
                           description='12 horas de jejum')
     procedure.save()
 
+    url = reverse('schedule-list')
+
+    payload = {
+        "detail": "exame do gabriel",
+        "patient": patient.id,
+        "procedure": [procedure.id],
+        "date": "2017-02-02",
+        "start_time": "14:00:00",
+        "end_time": "15:00:00"
+    }
+
+    assert Schedule.objects.all().count() == 0
+
+    response = client.post(url, data=payload, format='json')
+
+    assert response.status_code == 400
+
+    assert Schedule.objects.all().count() == 0
+
+
+def test_create_schedule_error_start_time():
+    user = User(username='gabriel')
+    user.set_password('teste')
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+
     client = APIClient()
     client.login(username='gabriel', password='teste')
+
+    patient = Patient(name='Gabriel Stain de Souza',
+                      email='gabriel_sten@hotmail.com')
+    patient.save()
+
+    procedure = Procedure(name='Exame de sangue',
+                          description='12 horas de jejum')
+    procedure.save()
 
     url = reverse('schedule-list')
 
@@ -306,9 +470,9 @@ def test_create_schedule_error_date():
         "detail": "exame do gabriel",
         "patient": patient.id,
         "procedure": [procedure.id],
-        "date": "2016-02-02",
-        "start_time": "14:00:00",
-        "end_time": "15:00:00"
+        "date": "2017-02-02",
+        "start_time": "15:00:00",
+        "end_time": "14:00:00"
     }
 
     assert Schedule.objects.all().count() == 0
@@ -343,6 +507,8 @@ def test_put_schedule_success():
     user.is_staff = True
     user.save()
 
+    today = date.today()
+
     patient = Patient(name='Gabriel', email='gabriel_sten@hotmail.com')
     patient.save()
 
@@ -369,7 +535,7 @@ def test_put_schedule_success():
         "detail": "Exame do Jorge",
         "patient": patient.id,
         "procedure": [procedure.id],
-        "date": "2018-12-20",
+        "date": today,
         "start_time": "20:00:00",
         "end_time": "22:00:00"
     }
@@ -385,6 +551,8 @@ def test_delete_schedule_success():
     user.is_staff = True
     user.save()
 
+    today = date.today()
+
     patient = Patient(name='Gabriel', email='gabriel_sten@hotmail.com')
     patient.save()
 
@@ -394,7 +562,7 @@ def test_delete_schedule_success():
     schedule = Schedule(
         patient=patient,
         detail='Exame do Gabriel',
-        date='2017-12-16',
+        date=today,
         start_time='15:00:00',
         end_time='16:00:00'
     )

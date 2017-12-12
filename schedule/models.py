@@ -40,10 +40,9 @@ class Procedure(models.Model):
         return "{}".format(self.name)
 
 
-#TODO modify procedure field to procedures
 class Schedule(models.Model):
-    detail = models.CharField('Detalhes', max_length=200, default=None)
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name='Paciente')
+    detail = models.CharField('Detalhes', max_length=200, default='')
+    patient = models.ForeignKey(Patient, verbose_name='Paciente')
     procedure = models.ManyToManyField(Procedure, verbose_name='Procedimentos')
     date = models.DateField('Data da Consulta')
     start_time = models.TimeField('Hora do inicio')
@@ -53,14 +52,8 @@ class Schedule(models.Model):
         verbose_name = 'Agendamento'
         verbose_name_plural = 'Agendamentos'
 
-    @property
-    def date_formatted(self):
-        if self.date:
-            return self.date.strftime('%d/%m/%Y')
-        return ''
-
     def __str__(self):
-        return "{}".format(self.pk)
+        return "{}".format(self.detail)
 
     def __repr__(self):
-        return "{}".format(self.pk)
+        return "{}".format(self.detail)

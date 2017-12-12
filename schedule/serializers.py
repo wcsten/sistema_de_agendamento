@@ -32,14 +32,14 @@ class ProcedureSerializer(serializers.ModelSerializer):
     def validate_name(self, value):
         if not len(value) > 3:
             raise serializers.ValidationError(
-                'Por Favor insira um nome válido'
+                'O nome do procedimento não pode ter menos que 3 caracteres'
             )
         return value
 
     def validate_description(self, value):
         if not len(value) > 3:
             raise serializers.ValidationError(
-                'Por Favor insira uma descrição válida'
+                'A descrição do procedimento não pode ter menos que 3 caracteres'
             )
         return value
 
@@ -57,11 +57,18 @@ class ScheduleSerializer(serializers.ModelSerializer):
             'end_time',
         ]
 
+        def validate_detail(self, value):
+            if not len(value) > 3:
+                raise serializers.ValidationError(
+                    'A descrição não pode ter menos que 3 caracteres'
+                )
+            return value
+
         def validate_date(self, value):
             today = date.today()
             if value < today:
                 raise serializers.ValidationError(
-                    'A data não pode ser menor que a data atual'
+                    'A data marcada não pode ser menor que a data atual'
                 )
             return value
 
@@ -69,6 +76,6 @@ class ScheduleSerializer(serializers.ModelSerializer):
             validated_data = super().validate(data)
             if validated_data['start_time'] > validated_data['end_time']:
                 raise serializers.ValidationError(
-                 "A hora de Termino não pode ser maior que a hora de inicio"
+                   "A hora de Termino não pode ser maior que a hora de inicio da consulta"
                 )
             return validated_data

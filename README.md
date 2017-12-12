@@ -53,9 +53,23 @@ Running the application:
 
 Running tests:
 
-Let's use the pytest to do the tests, with it properly installed we will execute the following code in the terminal inside the directory
+Let's use the pytest to do the tests, with it properly installed we will execute the following codes in the terminal inside the directory
 /sistema_de_agendamento:
+
+
+
+```bash
+export DJANGO_SETTINGS_MODULE=sistema_de_agendamento.settings
+```
+
+and to run all tests
 
 ```bash
 pytest
 ```
+our a specific test
+
+```bash
+pytest tests/tests_schedule/test_resources.py::your_test_name
+```
+
