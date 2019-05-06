@@ -7,3 +7,4 @@ dj-database-url
 flake8==3.7.7
 psycopg2==2.7.6.1
 gunicorn
+whitenoise==4.1.2
