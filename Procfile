@@ -1,1 +1,1 @@
-web: gunicorn sistema_de_agendamento.wsgi
+web: gunicorn sistema_de_agendamento.wsgi --log-file -

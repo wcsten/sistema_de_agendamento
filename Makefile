@@ -1,6 +1,13 @@
+
+.PHONY: migrate
+migrate:
+	@python src/manage.py migrate
+
+.PHONY: setup
 setup:
 	@pip install -r requirements.txt
-	@python manage.py migrate
+	@make migrate
 
+.PHONY: run
 run:
 	@python manage.py runserver
