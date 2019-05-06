@@ -2,3 +2,6 @@ Django==1.10
 djangorestframework==3.7.3
 pytest
 pytest-django
+python-decouple
+dj-database-url
+flake8==3.7.7
