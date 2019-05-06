@@ -1,1 +1,1 @@
-web: gunicorn sistema-agendamento.wsgi
+web: gunicorn sistema_de_agendamento.wsgi
