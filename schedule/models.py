@@ -42,7 +42,7 @@ class Procedure(models.Model):
 
 class Schedule(models.Model):
     detail = models.CharField('Detalhes', max_length=200, default='')
-    patient = models.ForeignKey(Patient, verbose_name='Paciente')
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name='Paciente')
     procedure = models.ManyToManyField(Procedure, verbose_name='Procedimentos')
     date = models.DateField('Data da Consulta')
     start_time = models.TimeField('Hora do inicio')
