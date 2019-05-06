@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.7.0"
+
+matrix:
+  include:
+    - python: 3.7
+      dist: xenial
+      sudo: true
+
+install:
+  - make setup
+
+script:
+  - make test

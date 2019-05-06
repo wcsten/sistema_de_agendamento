@@ -1,7 +1,7 @@
 
 .PHONY: migrate
 migrate:
-	@python src/manage.py migrate
+	@python manage.py migrate
 
 .PHONY: setup
 setup:
@@ -11,3 +11,7 @@ setup:
 .PHONY: run
 run:
 	@python manage.py runserver
+
+.PHONY: test
+test:
+	@pytest
