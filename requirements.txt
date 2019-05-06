@@ -5,3 +5,4 @@ pytest-django
 python-decouple
 dj-database-url
 flake8==3.7.7
+psycopg2==2.7.6.1
