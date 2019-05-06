@@ -26,17 +26,18 @@ Go to `/sistema_de_agendamento` directory:
 cd sistema_de_agendamento
 ```
 
-Run the following command:
+Run the following command to install:
 
 ```bash
-pip install -r requirements.txt
+make install
 ```
 
-Run the Migrate command to synchronize the database with the final version.
+And this to run:
 
 ```bash
-./manage.py migrate
+make run
 ```
+
 Run the command to create a superuser:
 ```bash
 ./manage.py createsuperuser

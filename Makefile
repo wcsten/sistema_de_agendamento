@@ -3,8 +3,8 @@
 migrate:
 	@python manage.py migrate
 
-.PHONY: setup
-setup:
+.PHONY: install
+install:
 	@pip install -r requirements.txt
 	@make migrate
 
